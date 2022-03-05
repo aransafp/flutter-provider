@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import '../models/task.dart';
+import 'TasksProvider.dart';
 
 class AddTaskScreen extends StatelessWidget {
-  AddTaskScreen({required this.onSubmit});
-
-  final Function(Task task) onSubmit;
   late String task;
 
   @override
@@ -50,9 +48,8 @@ class AddTaskScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
-                  onSubmit(
-                    Task(name: task),
-                  );
+                  Provider.of<TasksProvider>(context, listen: false)
+                      .addTask(task);
                   Navigator.pop(context);
                 },
               ),

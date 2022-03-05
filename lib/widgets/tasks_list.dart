@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoi/widgets/task_tile.dart';
 
-import '../models/task.dart';
+import '../screens/TasksProvider.dart';
 
-class TasksList extends StatefulWidget {
-  TasksList({required this.tasks});
-
-  final List<Task> tasks;
-
-  @override
-  State<TasksList> createState() => _TasksListState();
-}
-
-class _TasksListState extends State<TasksList> {
+class TasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.tasks.length,
-      itemBuilder: (context, index) {
-        final task = widget.tasks[index];
-        return TaskTile(
-          name: task.name,
-          isChecked: task.isDone,
-          onChanged: (value) {
-            setState(() {
-              task.toggleDone();
-            });
+    return Consumer<TasksProvider>(
+      builder: (context, taskData, _) {
+        return ListView.builder(
+          itemCount: taskData.tasksCount,
+          itemBuilder: (context, index) {
+            final task = taskData.tasks[index];
+            return TaskTile(
+              name: task.name,
+              isChecked: task.isDone,
+              onChanged: (value) {
+                taskData.updateTask(task);
+              },
+              onLongPressed: () {
+                print('Long pressed');
+                taskData.deleteTask(task);
+              },
+            );
           },
         );
       },
